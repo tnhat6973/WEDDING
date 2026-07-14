@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thiệp Mời Cưới — Hưng & Hưng</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Cinzel:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+  :root{
+    --cream:        #FBF5EC;
+    --cream-deep:   #F1E6D6;
+    --rose-dust:    #D9AFAE;
+    --rose-deep:    #B8767A;
+    --rose-shadow:  #7C4B4F;
+    --gold:         #B8935A;
+    --gold-bright:  #E4C583;
+    --ink:          #3C2E2A;
+  }
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'EB Garamond', serif;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  .font-display{ font-family:'Cormorant Garamond', serif; }
+  .font-eyebrow{ font-family:'Cinzel', serif; letter-spacing:.35em; }
+
+  .title-script{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:300;
+    letter-spacing:.04em;
+  }
+
+  .name-glow{
+    text-shadow:
+      0 0 18px rgba(228,197,131,.55),
+      0 0 42px rgba(228,197,131,.28);
+  }
+
+  .divider-flourish{
+    display:flex; align-items:center; justify-content:center; gap:.85rem;
+  }
+  .divider-flourish .line{
+    height:1px; width:64px;
+    background:linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .grain::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    pointer-events:none;
+    mix-blend-mode:overlay;
+  }
+
+  /* Hero */
+  #hero{ position:relative; height:100svh; overflow:hidden; }
+  #hero-img-wrap{
+    position:absolute; inset:-4%; will-change:transform;
+  }
+  #hero-img{
+    width:100%; height:100%; object-fit:cover;
+    transform:scale(1.08);
+    filter:saturate(0.92) brightness(0.92);
+  }
+  video#hero-img{ object-position:center 30%; }
+
+  /* Wedding film section */
+  .film-frame{
+    position:relative; border-radius:1.25rem; overflow:hidden;
+    border:1px solid rgba(184,147,90,.4);
+    box-shadow:0 40px 80px -30px rgba(124,75,79,.45), inset 0 0 0 1px rgba(255,255,255,.25);
+  }
+  .film-frame video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .film-sound-btn{
+    backdrop-filter:blur(6px);
+    background:rgba(60,46,42,.45);
+    border:1px solid rgba(255,255,255,.4);
+  }
+  .hero-vignette{
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse at center, rgba(60,46,42,0) 35%, rgba(40,26,24,.55) 100%),
+      linear-gradient(to bottom, rgba(40,26,24,.35) 0%, rgba(40,26,24,0) 25%, rgba(40,26,24,0) 60%, rgba(30,18,16,.65) 100%);
+  }
+
+  .scroll-cue{
+    animation:cueBob 2.4s ease-in-out infinite;
+  }
+  @keyframes cueBob{
+    0%,100%{ transform:translateY(0); opacity:.65; }
+    50%{ transform:translateY(10px); opacity:1; }
+  }
+
+  /* petal canvas overlay */
+  #petal-canvas{
+    position:fixed; inset:0; width:100vw; height:100vh;
+    pointer-events:none; z-index:40;
+  }
+
+  .reveal{ opacity:0; transform:translateY(28px); }
+
+  .card-frame{
+    background:linear-gradient(180deg, #FFFDF9, var(--cream-deep));
+    border:1px solid rgba(184,147,90,.35);
+    box-shadow:0 30px 60px -30px rgba(124,75,79,.35), inset 0 0 0 1px rgba(255,255,255,.4);
+  }
+
+  .btn-gold{
+    background:linear-gradient(135deg, var(--gold-bright), var(--gold));
+    color:#3C2E2A;
+    box-shadow:0 8px 24px -8px rgba(184,147,90,.55);
+  }
+  .btn-gold:hover{ filter:brightness(1.06); }
+
+  .music-btn{
+    backdrop-filter:blur(6px);
+    background:rgba(251,245,236,.75);
+    border:1px solid rgba(184,147,90,.5);
+  }
+
+  .timeline-dot{
+    box-shadow:0 0 0 4px rgba(251,245,236,1), 0 0 0 5px rgba(184,147,90,.5);
+  }
+
+  input, textarea{
+    background:rgba(255,255,255,.6);
+    border:1px solid rgba(184,147,90,.4);
+  }
+  input:focus, textarea:focus{
+    outline:2px solid var(--gold);
+    outline-offset:2px;
+  }
+
+  ::selection{ background:var(--rose-dust); color:#fff; }
+</style>
+</head>
+<body class="relative">
+
+<canvas id="petal-canvas"></canvas>
+
+<!-- MUSIC TOGGLE -->
+<button id="music-toggle" aria-label="Bật nhạc nền" class="music-btn fixed top-5 right-5 z-50 w-12 h-12 rounded-full flex items-center justify-center transition hover:scale-105">
+  <svg id="icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#7C4B4F" stroke-width="1.6" class="w-5 h-5">
+    <path d="M11 5 6 9H3v6h3l5 4V5Z"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/>
+  </svg>
+  <svg id="icon-playing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#7C4B4F" stroke-width="1.6" class="w-5 h-5 hidden">
+    <path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a9 9 0 0 1 0 12"/>
+  </svg>
+</button>
+<audio id="bgm" loop preload="none">
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8e70c5d92.mp3?filename=romantic-piano-13391.mp3" type="audio/mpeg">
+</audio>
+
+<!-- HERO -->
+<section id="hero" class="grain">
+  <div id="hero-img-wrap">
+    <video id="hero-img" autoplay muted loop playsinline preload="auto" poster="hero-poster.jpg" aria-label="Ảnh cưới minh họa AI của Hưng &amp; Hưng">
+      <source src="hung-and-hung.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-vignette"></div>
+
+  <div class="relative z-10 h-full flex flex-col items-center justify-center px-6 text-center">
+    <p id="hero-eyebrow" class="font-eyebrow text-[11px] md:text-xs text-[#F1E6D6] uppercase mb-5 opacity-90">Save The Date</p>
+
+    <h1 id="hero-title" class="title-script text-white text-4xl sm:text-5xl md:text-6xl leading-tight mb-6" style="text-shadow:0 4px 30px rgba(0,0,0,.35);">
+      Thiệp Mời Cưới
+    </h1>
+
+    <p id="hero-sub" class="font-display italic text-base sm:text-lg md:text-xl text-[#F1E6D6]/90 mb-6 tracking-wide">
+      Lễ thành hôn của
+    </p>
+
+    <div id="hero-names" class="flex items-center justify-center gap-4 sm:gap-7 mb-8">
+      <span class="title-script name-glow text-white text-5xl sm:text-6xl md:text-7xl">Sơn Tùng</span>
+      <span class="font-display text-[var(--gold-bright)] text-2xl sm:text-3xl italic self-center">&amp;</span>
+      <span class="title-script name-glow text-white text-5xl sm:text-6xl md:text-7xl">Hải Tú</span>
+    </div>
+
+    <div class="divider-flourish mb-6">
+      <span class="line"></span>
+      <span class="w-1.5 h-1.5 rotate-45 bg-[var(--gold-bright)]"></span>
+      <span class="line"></span>
+    </div>
+
+    <p class="font-display text-[#F1E6D6] text-sm sm:text-base tracking-[.15em] uppercase">14 . 02 . 2027 &nbsp;•&nbsp; Hà Nội</p>
+  </div>
+
+  <div class="scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-[#F1E6D6]">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" class="w-6 h-9">
+      <rect x="7" y="1" width="10" height="18" rx="5"/>
+      <circle cx="12" cy="7" r="1.4" fill="currentColor" stroke="none"/>
+    </svg>
+  </div>
+</section>
+
+<!-- INTRO / QUOTE -->
+<section class="relative py-24 md:py-32 px-6">
+  <div class="max-w-2xl mx-auto text-center">
+    <p class="reveal font-eyebrow text-xs text-[var(--gold)] mb-6">Trân trọng kính mời</p>
+    <p class="reveal font-display italic text-2xl md:text-3xl leading-relaxed text-[var(--rose-shadow)]">
+      "Tình yêu không phải là nhìn nhau,<br class="hidden sm:block"> mà là cùng nhau nhìn về một hướng."
+    </p>
+    <div class="reveal divider-flourish mt-8">
+      <span class="line"></span>
+      <span class="w-1.5 h-1.5 rotate-45 bg-[var(--gold)]"></span>
+      <span class="line"></span>
+    </div>
+    <p class="reveal mt-8 text-lg leading-relaxed text-[var(--ink)]/80">
+      Chúng tôi trân trọng kính mời quý vị đến chung vui và chia sẻ khoảnh khắc thiêng liêng
+      trong ngày trọng đại của đời mình. Sự hiện diện của quý vị là niềm hạnh phúc lớn lao
+      nhất đối với gia đình hai bên.
+    </p>
+  </div>
+</section>
+
+<!-- COUPLE -->
+<section class="relative py-20 md:py-28 px-6 bg-[var(--cream-deep)]/60">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 md:mb-20">
+      <p class="reveal font-eyebrow text-xs text-[var(--gold)] mb-3">Cô Dâu &amp; Chú Rể</p>
+      <h2 class="reveal title-script text-4xl md:text-5xl text-[var(--rose-shadow)]">Đôi Uyên Ương</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-8 md:gap-14">
+      <div class="reveal card-frame rounded-2xl p-8 md:p-10 text-center relative">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center border border-[var(--gold)]/50">
+          <span class="title-script text-3xl text-[var(--rose-deep)]">H</span>
+        </div>
+        <p class="font-eyebrow text-[10px] text-[var(--gold)] mb-2">Chú Rể</p>
+        <h3 class="title-script text-3xl md:text-4xl text-[var(--ink)] mb-3">Sơn Tùng</h3>
+        <p class="text-[var(--ink)]/70 leading-relaxed">
+          Con trai ông Trần Văn A &amp; bà Nguyễn Thị B
+        </p>
+      </div>
+
+      <div class="reveal card-frame rounded-2xl p-8 md:p-10 text-center relative">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center border border-[var(--gold)]/50">
+          <span class="title-script text-3xl text-[var(--rose-deep)]">H</span>
+        </div>
+        <p class="font-eyebrow text-[10px] text-[var(--gold)] mb-2">Cô Dâu</p>
+        <h3 class="title-script text-3xl md:text-4xl text-[var(--ink)] mb-3">Hải Tú</h3>
+        <p class="text-[var(--ink)]/70 leading-relaxed">
+          Con gái ông Lê Văn C &amp; bà Phạm Thị D
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WEDDING FILM -->
+<section class="relative py-20 md:py-28 px-6 bg-[var(--cream-deep)]/60">
+  <div class="max-w-3xl mx-auto text-center mb-12">
+    <p class="reveal font-eyebrow text-xs text-[var(--gold)] mb-3">Thước Phim Cưới</p>
+    <h2 class="reveal title-script text-4xl md:text-5xl text-[var(--rose-shadow)]">Khoảnh Khắc Của Chúng Tôi</h2>
+    <p class="reveal mt-4 text-[var(--ink)]/70 text-sm md:text-base">NƠI CHÚNG TÔI VỀ MỘT NHÀ</p>
+  </div>
+  <div class="reveal film-frame max-w-3xl mx-auto aspect-video">
+    <video id="story-video" muted loop playsinline preload="none" poster="story-poster.jpg" aria-label="Video minh họa AI ngày cưới của Hưng &amp; Hưng">
+      <source src="hung-and-hung.mp4" type="video/mp4">
+    </video>
+    <button id="film-sound-toggle" aria-label="Bật tiếng video" class="film-sound-btn absolute bottom-4 right-4 z-10 w-11 h-11 rounded-full flex items-center justify-center transition hover:scale-105">
+      <svg id="film-icon-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FBF5EC" stroke-width="1.6" class="w-5 h-5">
+        <path d="M11 5 6 9H3v6h3l5 4V5Z"/><line x1="16" y1="9" x2="21" y2="15"/><line x1="21" y1="9" x2="16" y2="15"/>
+      </svg>
+      <svg id="film-icon-playing" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#FBF5EC" stroke-width="1.6" class="w-5 h-5 hidden">
+        <path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a9 9 0 0 1 0 12"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="relative py-20 md:py-28 px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-16">
+      <p class="reveal font-eyebrow text-xs text-[var(--gold)] mb-3">Chương Trình</p>
+      <h2 class="reveal title-script text-4xl md:text-5xl text-[var(--rose-shadow)]">Lịch Trình Ngày Cưới</h2>
+    </div>
+
+    <div class="relative pl-8 md:pl-10">
+      <div class="absolute left-[7px] md:left-[9px] top-2 bottom-2 w-px bg-gradient-to-b from-transparent via-[var(--gold)]/50 to-transparent"></div>
+
+      <div class="reveal relative mb-12">
+        <span class="timeline-dot absolute -left-8 md:-left-10 top-1.5 w-3 h-3 rounded-full bg-[var(--gold)]"></span>
+        <p class="font-eyebrow text-[11px] text-[var(--gold)] mb-1">09:00 — Sáng</p>
+        <h4 class="font-display text-xl text-[var(--ink)] mb-1">Lễ Vu Quy</h4>
+        <p class="text-[var(--ink)]/70">Diễn ra tại tư gia nhà gái</p>
+      </div>
+
+      <div class="reveal relative mb-12">
+        <span class="timeline-dot absolute -left-8 md:-left-10 top-1.5 w-3 h-3 rounded-full bg-[var(--gold)]"></span>
+        <p class="font-eyebrow text-[11px] text-[var(--gold)] mb-1">11:00 — Trưa</p>
+        <h4 class="font-display text-xl text-[var(--ink)] mb-1">Lễ Tân Hôn</h4>
+        <p class="text-[var(--ink)]/70">Diễn ra tại tư gia nhà trai</p>
+      </div>
+
+      <div class="reveal relative">
+        <span class="timeline-dot absolute -left-8 md:-left-10 top-1.5 w-3 h-3 rounded-full bg-[var(--gold)]"></span>
+        <p class="font-eyebrow text-[11px] text-[var(--gold)] mb-1">18:00 — Tối</p>
+        <h4 class="font-display text-xl text-[var(--ink)] mb-1">Tiệc Chiêu Đãi</h4>
+        <p class="text-[var(--ink)]/70">Trung tâm Tiệc cưới Hoa Hồng, Hà Nội</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="relative py-20 md:py-28 px-6 bg-[var(--rose-shadow)] text-[var(--cream)] overflow-hidden grain">
+  <div class="max-w-3xl mx-auto text-center relative z-10">
+    <p class="reveal font-eyebrow text-xs text-[var(--gold-bright)] mb-3">Đếm Ngược</p>
+    <h2 class="reveal title-script text-4xl md:text-5xl mb-12">Chỉ Còn Lại</h2>
+
+    <div id="countdown" class="reveal grid grid-cols-4 gap-3 sm:gap-6 max-w-xl mx-auto">
+      <div class="flex flex-col items-center">
+        <span id="cd-days" class="font-display text-4xl sm:text-5xl text-[var(--gold-bright)]">00</span>
+        <span class="font-eyebrow text-[10px] mt-2 opacity-80">Ngày</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <span id="cd-hours" class="font-display text-4xl sm:text-5xl text-[var(--gold-bright)]">00</span>
+        <span class="font-eyebrow text-[10px] mt-2 opacity-80">Giờ</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <span id="cd-mins" class="font-display text-4xl sm:text-5xl text-[var(--gold-bright)]">00</span>
+        <span class="font-eyebrow text-[10px] mt-2 opacity-80">Phút</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <span id="cd-secs" class="font-display text-4xl sm:text-5xl text-[var(--gold-bright)]">00</span>
+        <span class="font-eyebrow text-[10px] mt-2 opacity-80">Giây</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RSVP -->
+<section class="relative py-20 md:py-28 px-6">
+  <div class="max-w-xl mx-auto">
+    <div class="text-center mb-12">
+      <p class="reveal font-eyebrow text-xs text-[var(--gold)] mb-3">Xác Nhận Tham Dự</p>
+      <h2 class="reveal title-script text-4xl md:text-5xl text-[var(--rose-shadow)]">RSVP</h2>
+      <p class="reveal mt-4 text-[var(--ink)]/70">Vui lòng phản hồi trước ngày 01.02.2027</p>
+    </div>
+
+    <form id="rsvp-form" class="reveal card-frame rounded-2xl p-8 md:p-10 space-y-5" onsubmit="return false;">
+      <div>
+        <label class="block font-eyebrow text-[10px] text-[var(--rose-shadow)] mb-2">Họ và tên</label>
+        <input type="text" required class="w-full rounded-lg px-4 py-3 text-[var(--ink)]" placeholder="Nguyễn Văn A">
+      </div>
+      <div>
+        <label class="block font-eyebrow text-[10px] text-[var(--rose-shadow)] mb-2">Bạn có thể tham dự không?</label>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 text-[var(--ink)]/80"><input type="radio" name="attend" checked> Chắc chắn có mặt</label>
+          <label class="flex items-center gap-2 text-[var(--ink)]/80"><input type="radio" name="attend"> Rất tiếc, xin phép vắng</label>
+        </div>
+      </div>
+      <div>
+        <label class="block font-eyebrow text-[10px] text-[var(--rose-shadow)] mb-2">Lời chúc</label>
+        <textarea rows="3" class="w-full rounded-lg px-4 py-3 text-[var(--ink)]" placeholder="Gửi lời chúc phúc đến đôi uyên ương..."></textarea>
+      </div>
+      <button id="rsvp-submit" class="btn-gold w-full rounded-lg py-3 font-eyebrow text-xs tracking-[.2em] uppercase transition">
+        Gửi Lời Chúc
+      </button>
+      <p id="rsvp-thanks" class="hidden text-center text-sm text-[var(--rose-shadow)] font-display italic pt-2">
+        Cảm ơn bạn — lời chúc đã được ghi nhận 💐
+      </p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="relative py-16 px-6 text-center bg-[var(--cream-deep)]">
+  <p class="title-script text-3xl name-glow text-[var(--rose-deep)] mb-3">Hưng &amp; Hưng</p>
+  <div class="divider-flourish mb-4">
+    <span class="line"></span>
+    <span class="w-1.5 h-1.5 rotate-45 bg-[var(--gold)]"></span>
+    <span class="line"></span>
+  </div>
+  <p class="text-sm text-[var(--ink)]/60 font-display italic">Rất hân hạnh được đón tiếp quý khách</p>
+</footer>
+
+<script>
+/* ---------------- GSAP setup ---------------- */
+gsap.registerPlugin(ScrollTrigger);
+
+/* Hero entrance timeline */
+const heroTl = gsap.timeline({ defaults:{ ease:"power3.out" } });
+heroTl
+  .fromTo("#hero-eyebrow", { opacity:0, y:-14 }, { opacity:.9, y:0, duration:1 }, 0.2)
+  .fromTo("#hero-title", { opacity:0, y:26, letterSpacing:"0.15em" }, { opacity:1, y:0, letterSpacing:"0.04em", duration:1.4 }, 0.5)
+  .fromTo("#hero-sub", { opacity:0, y:16 }, { opacity:1, y:0, duration:1.1 }, 1.1)
+  .fromTo("#hero-names span", { opacity:0, y:24, scale:.94 }, { opacity:1, y:0, scale:1, duration:1.3, stagger:.25 }, 1.5);
+
+/* Hero mouse parallax (3D tilt) */
+const heroWrap = document.getElementById("hero-img-wrap");
+const heroSection = document.getElementById("hero");
+let targetX = 0, targetY = 0, curX = 0, curY = 0;
+
+heroSection.addEventListener("mousemove", (e) => {
+  const r = heroSection.getBoundingClientRect();
+  const px = (e.clientX - r.left) / r.width - 0.5;
+  const py = (e.clientY - r.top) / r.height - 0.5;
+  targetX = px * 26;
+  targetY = py * 20;
+});
+heroSection.addEventListener("mouseleave", () => { targetX = 0; targetY = 0; });
+
+gsap.ticker.add(() => {
+  curX += (targetX - curX) * 0.06;
+  curY += (targetY - curY) * 0.06;
+  gsap.set(heroWrap, { x: curX, y: curY, rotateY: curX * 0.12, rotateX: -curY * 0.12, transformPerspective: 900 });
+});
+
+/* Hero scroll parallax (depth on scroll) */
+gsap.to("#hero-img", {
+  yPercent: 14,
+  scale: 1.16,
+  ease: "none",
+  scrollTrigger: { trigger: "#hero", start: "top top", end: "bottom top", scrub: true }
+});
+
+/* Scroll-triggered reveals */
+gsap.utils.toArray(".reveal").forEach((el) => {
+  gsap.to(el, {
+    opacity: 1, y: 0, duration: 1.1, ease: "power3.out",
+    scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" }
+  });
+});
+
+/* ---------------- Countdown ---------------- */
+const weddingDate = new Date("2027-02-14T09:00:00+07:00").getTime();
+function updateCountdown(){
+  const now = Date.now();
+  let diff = Math.max(0, weddingDate - now);
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById("cd-days").textContent  = String(d).padStart(2,"0");
+  document.getElementById("cd-hours").textContent = String(h).padStart(2,"0");
+  document.getElementById("cd-mins").textContent  = String(m).padStart(2,"0");
+  document.getElementById("cd-secs").textContent  = String(s).padStart(2,"0");
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ---------------- RSVP ---------------- */
+document.getElementById("rsvp-submit").addEventListener("click", () => {
+  document.getElementById("rsvp-thanks").classList.remove("hidden");
+  gsap.fromTo("#rsvp-thanks", { opacity:0, y:8 }, { opacity:1, y:0, duration:.6 });
+});
+
+/* ---------------- Music toggle ---------------- */
+const bgm = document.getElementById("bgm");
+const musicBtn = document.getElementById("music-toggle");
+const iconMuted = document.getElementById("icon-muted");
+const iconPlaying = document.getElementById("icon-playing");
+let playing = false;
+musicBtn.addEventListener("click", () => {
+  if (!playing) {
+    bgm.volume = 0.35;
+    bgm.play().catch(()=>{});
+    iconMuted.classList.add("hidden");
+    iconPlaying.classList.remove("hidden");
+    playing = true;
+  } else {
+    bgm.pause();
+    iconPlaying.classList.add("hidden");
+    iconMuted.classList.remove("hidden");
+    playing = false;
+  }
+});
+
+/* ---------------- Wedding film section ---------------- */
+const storyVideo = document.getElementById("story-video");
+if (storyVideo) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        storyVideo.play().catch(()=>{});
+      } else {
+        storyVideo.pause();
+      }
+    });
+  }, { threshold: 0.4 });
+  io.observe(storyVideo);
+
+  const filmSoundBtn = document.getElementById("film-sound-toggle");
+  const filmIconMuted = document.getElementById("film-icon-muted");
+  const filmIconPlaying = document.getElementById("film-icon-playing");
+  filmSoundBtn.addEventListener("click", () => {
+    storyVideo.muted = !storyVideo.muted;
+    filmIconMuted.classList.toggle("hidden", !storyVideo.muted);
+    filmIconPlaying.classList.toggle("hidden", storyVideo.muted);
+  });
+}
+
+/* ---------------- Petal / bloom particle system (Canvas) ---------------- */
+const canvas = document.getElementById("petal-canvas");
+const ctx = canvas.getContext("2d");
+let W, H, dpr;
+
+function resizeCanvas(){
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + "px"; canvas.style.height = H + "px";
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function makePetal(){
+  return {
+    x: Math.random()*W,
+    y: -20 - Math.random()*H*0.5,
+    size: 8 + Math.random()*10,
+    speedY: 0.5 + Math.random()*1.1,
+    speedX: (Math.random()-0.5)*0.6,
+    rot: Math.random()*360,
+    rotSpeed: (Math.random()-0.5)*1.4,
+    sway: Math.random()*Math.PI*2,
+    swaySpeed: 0.01 + Math.random()*0.02,
+    opacity: 0.55 + Math.random()*0.4,
+    hue: Math.random() > 0.5 ? "rose" : "cream"
+  };
+}
+
+let petals = [];
+const MAX_PETALS = 46;
+let petalsActive = false;
+
+function drawPetal(p){
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.rotate(p.rot * Math.PI/180);
+  ctx.globalAlpha = p.opacity;
+  const grad = ctx.createLinearGradient(-p.size,-p.size,p.size,p.size);
+  if (p.hue === "rose"){
+    grad.addColorStop(0, "#F3D2D4");
+    grad.addColorStop(1, "#C98B8B");
+  } else {
+    grad.addColorStop(0, "#FFFdf6");
+    grad.addColorStop(1, "#EFD9AE");
+  }
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(0, -p.size*0.6);
+  ctx.bezierCurveTo(p.size*0.7, -p.size*0.5, p.size*0.7, p.size*0.5, 0, p.size*0.8);
+  ctx.bezierCurveTo(-p.size*0.7, p.size*0.5, -p.size*0.7, -p.size*0.5, 0, -p.size*0.6);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animatePetals(){
+  ctx.clearRect(0,0,W,H);
+  if (petalsActive && !reduceMotion){
+    petals.forEach(p => {
+      p.sway += p.swaySpeed;
+      p.x += p.speedX + Math.sin(p.sway)*0.6;
+      p.y += p.speedY;
+      p.rot += p.rotSpeed;
+      if (p.y > H + 30){
+        Object.assign(p, makePetal(), { y: -20 });
+      }
+      drawPetal(p);
+    });
+  }
+  requestAnimationFrame(animatePetals);
+}
+
+for (let i=0;i<MAX_PETALS;i++){ petals.push(makePetal()); }
+animatePetals();
+
+/* Trigger petals once user scrolls past hero */
+ScrollTrigger.create({
+  trigger: "#hero",
+  start: "bottom 90%",
+  onEnter: () => { petalsActive = true; },
+  onLeaveBack: () => { petalsActive = false; }
+});
+
+/* Bloom burst (small flower blooms) triggered at each major section reveal */
+function spawnBloom(xRatio, yRatio){
+  if (reduceMotion) return;
+  const bx = W * xRatio, by = H * yRatio;
+  let petalsBurst = [];
+  for (let i=0;i<10;i++){
+    const ang = (Math.PI*2/10)*i;
+    petalsBurst.push({ x:bx, y:by, ang, dist:0, size:5+Math.random()*4, life:1 });
+  }
+  function step(){
+    ctx.save();
+    petalsBurst.forEach(p => {
+      p.dist += 1.6;
+      p.life -= 0.018;
+      const px = p.x + Math.cos(p.ang)*p.dist;
+      const py = p.y + Math.sin(p.ang)*p.dist;
+      if (p.life > 0){
+        ctx.globalAlpha = Math.max(p.life,0);
+        ctx.fillStyle = "#E4C583";
+        ctx.beginPath();
+        ctx.ellipse(px, py, p.size, p.size*0.6, p.ang, 0, Math.PI*2);
+        ctx.fill();
+      }
+    });
+    ctx.restore();
+    petalsBurst = petalsBurst.filter(p => p.life > 0);
+    if (petalsBurst.length > 0) requestAnimationFrame(step);
+  }
+  step();
+}
+
+["#hero", "section"].length; // noop guard
+document.querySelectorAll("section h2, footer p.title-script").forEach((el) => {
+  ScrollTrigger.create({
+    trigger: el,
+    start: "top 80%",
+    once: true,
+    onEnter: () => {
+      const r = el.getBoundingClientRect();
+      spawnBloom(r.left/window.innerWidth, r.top/window.innerHeight);
+    }
+  });
+});
+</script>
+</body>
+</html>
